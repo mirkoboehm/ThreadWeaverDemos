@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file implements the SMIVItem class.
 
@@ -50,21 +50,21 @@ SMIVItem::SMIVItem ( Weaver *weaver,
         m_desc2 = fi.absoluteFilePath();
         m_fileloader = new FileLoaderJob ( fi.absoluteFilePath(),  this );
         m_fileloader->setObjectName ( tr ( "load file: " ) + fi.baseName() );
-        connect ( m_fileloader,  SIGNAL (done(ThreadWeaver::Job*)),
-                  SLOT (fileLoaderReady(ThreadWeaver::Job*)) );
+        connect ( m_fileloader,  SIGNAL (done(ThreadWeaver::JobPointer)),
+                  SLOT (fileLoaderReady(ThreadWeaver::JobPointer)) );
         m_fileloader->assignQueuePolicy( resourceRestriction() );
         m_imageloader = new QImageLoaderJob ( m_fileloader,  this );
-        connect ( m_imageloader,  SIGNAL (done(ThreadWeaver::Job*)),
-                  SLOT (imageLoaderReady(ThreadWeaver::Job*)) );
+        connect ( m_imageloader,  SIGNAL (done(ThreadWeaver::JobPointer)),
+                  SLOT (imageLoaderReady(ThreadWeaver::JobPointer)) );
         m_imageloader->setObjectName( tr( "load image: " ) + fi.baseName() );
         m_thumb = new ComputeThumbNailJob ( m_imageloader,  this );
-        connect ( m_thumb,  SIGNAL (done(ThreadWeaver::Job*)),
-                  SLOT (computeThumbReady(ThreadWeaver::Job*)) );
+        connect ( m_thumb,  SIGNAL (done(ThreadWeaver::JobPointer)),
+                  SLOT (computeThumbReady(ThreadWeaver::JobPointer)) );
         m_thumb->setObjectName ( tr( "scale image: " ) + fi.baseName() );
-        m_sequence->addJob ( m_fileloader );
-        m_sequence->addJob ( m_imageloader );
-        m_sequence->addJob ( m_thumb );
-        weaver->enqueue ( m_sequence );
+        m_sequence->addRawJob( m_fileloader );
+        m_sequence->addRawJob( m_imageloader );
+        m_sequence->addRawJob( m_thumb );
+        weaver->enqueueRaw( m_sequence );
     } else {
         // in this wee little program, we just ignore that we cannot access the file
     }
@@ -85,13 +85,13 @@ QString SMIVItem::desc2() const
     return m_desc2;
 }
 
-void SMIVItem::fileLoaderReady( ThreadWeaver::Job* )
+void SMIVItem::fileLoaderReady( ThreadWeaver::JobPointer )
 {
     debug ( 3, "SMIVItem::fileLoaderReady: %s loaded.\n",
             qPrintable ( m_name ) );
 }
 
-void SMIVItem::imageLoaderReady( ThreadWeaver::Job* )
+void SMIVItem::imageLoaderReady(JobPointer )
 {
     debug ( 3, "SMIVItem::imageLoaderReady: %s processed.\n",
             qPrintable ( m_name ) );
@@ -105,7 +105,7 @@ void SMIVItem::imageLoaderReady( ThreadWeaver::Job* )
               .arg( size.height() );
 }
 
-void SMIVItem::computeThumbReady( ThreadWeaver::Job* )
+void SMIVItem::computeThumbReady(JobPointer )
 {
     debug ( 3, "SMIVItem::computeThumbReady: %s scaled.\n",
             qPrintable ( m_name ) );
@@ -119,5 +119,3 @@ QImage SMIVItem::thumb() const
     P_ASSERT ( m_thumb->isFinished() );
     return m_thumb->thumb();
 }
-
-#include "SMIVItem.moc"

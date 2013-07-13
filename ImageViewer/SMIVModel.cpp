@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file implements the SMIVModel class.
 
@@ -84,4 +84,3 @@ const SMIVItem* SMIVModel::data( int index ) const
     return m_data[index];
 }
 
-#include "SMIVModel.moc"

@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file declares the SMIVItem class.
 
@@ -43,9 +43,9 @@ public:
 Q_SIGNALS:
     void thumbReady( SMIVItem* );
 private Q_SLOTS:
-    void fileLoaderReady ( ThreadWeaver::Job* );
-    void imageLoaderReady ( ThreadWeaver::Job* );
-    void computeThumbReady ( ThreadWeaver::Job* );
+    void fileLoaderReady ( ThreadWeaver::JobPointer );
+    void imageLoaderReady ( ThreadWeaver::JobPointer );
+    void computeThumbReady ( ThreadWeaver::JobPointer );
 protected:
     QString m_path;
     QString m_name;

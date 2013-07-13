@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file declares the ComputeThumbNailJob class. It scales images.
 
@@ -29,13 +29,11 @@ class ComputeThumbNailJob : public Job
 {
     Q_OBJECT
 public:
-    explicit ComputeThumbNailJob ( QImageLoaderJob *imageLoader,
-			  QObject *parent = 0);
+    explicit ComputeThumbNailJob(QImageLoaderJob *imageLoader, QObject *parent = 0);
     /** Returns the "ready made" thumbnail. */
-  QImage thumb();
+    QImage thumb();
 
-  /** reimpl */
-  int priority () const;
+    int priority() const Q_DECL_OVERRIDE;
 protected:
     void run();
     QImage m_thumb;

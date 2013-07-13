@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file implements the SMIV class.
 
@@ -27,19 +27,18 @@
 
 using namespace ThreadWeaver;
 
-SMIV::SMIV ( Weaver* w )
+SMIV::SMIV(Weaver* w)
     : QWidget()
-    , m_weaver ( w )
-    , m_noOfJobs ( 0 )
-    , m_quit ( false )
+    , m_weaver(w)
+    , m_noOfJobs(0)
+    , m_quit(false)
 {
-    ui.setupUi ( this );
-    connect ( m_weaver,  SIGNAL (finished()),  SLOT (slotJobsDone()) );
-    connect ( m_weaver,  SIGNAL (jobDone(ThreadWeaver::Job*)),
-              SLOT(slotJobDone(ThreadWeaver::Job*)) );
-    connect ( m_weaver,  SIGNAL (suspended()),  SLOT (weaverSuspended()) );
-    ui.listView->setModel ( &model );
-    ui.listView->setItemDelegate( &del );
+    ui.setupUi(this);
+    connect(m_weaver, SIGNAL (finished()), SLOT(slotJobsDone()));
+    connect(m_weaver, SIGNAL (jobDone(ThreadWeaver::JobPointer)), SLOT(slotJobDone(ThreadWeaver::JobPointer)));
+    connect(m_weaver, SIGNAL (suspended()), SLOT(weaverSuspended()));
+    ui.listView->setModel(&model);
+    ui.listView->setItemDelegate(&del);
 }
 
 SMIV::~SMIV ()
@@ -97,7 +96,7 @@ void SMIV::on_pbCancel_clicked()
 
 void SMIV::on_pbSuspend_clicked()
 {
-    if ( m_weaver->state().stateId() == Suspended )
+    if ( m_weaver->state()->stateId() == Suspended )
     {
         ui.pbSuspend->setText ( "Suspend" );
         m_weaver->resume();
@@ -114,7 +113,7 @@ void SMIV::on_pbQuit_clicked()
     ui.pbCancel->setEnabled(false);
     ui.pbSuspend->setEnabled(false);
     ui.pbQuit->setEnabled(false);
-    if ( m_weaver->isIdle() || m_weaver->state().stateId() == Suspended )
+    if ( m_weaver->isIdle() || m_weaver->state()->stateId() == Suspended )
     {
         QApplication::instance()->quit();
     } else {
@@ -124,7 +123,7 @@ void SMIV::on_pbQuit_clicked()
     }
 }
 
-void SMIV::slotJobDone ( ThreadWeaver::Job* )
+void SMIV::slotJobDone (JobPointer )
 {
     ui.progressBar->setValue ( ui.progressBar->value() + 1 );
 }
@@ -173,5 +172,3 @@ int main ( int argc,  char** argv )
     smiv.show();
     return app.exec();
 }
-
-#include "SMIV.moc"

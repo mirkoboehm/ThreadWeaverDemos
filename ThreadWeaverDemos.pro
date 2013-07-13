@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
 SUBDIRS = HelloWorld/HelloWorld.pro HelloWorld/HelloWorldRaw.pro \
-    SequenceDemo
+    SequenceDemo ImageViewer
 OTHER_FILES = ThreadWeaver.pri README

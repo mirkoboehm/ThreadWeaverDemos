@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file implements the ComputeThumbNNailJob class.
 
@@ -72,5 +72,3 @@ void ComputeThumbNailJob::run()
     m_thumb = *im;
 #endif
 }
-
-#include "ComputeThumbNailJob.moc"

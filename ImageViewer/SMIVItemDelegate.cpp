@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file implements the SMIVItemDelegate class.
 
@@ -111,4 +111,3 @@ QSize SMIVItemDelegate::sizeHint(const QStyleOptionViewItem & ,
     return QSize ( Width,  Height );
 }
 
-#include "SMIVItemDelegate.moc"

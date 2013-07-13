@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file implements the SMIVView class.
 
@@ -25,5 +25,3 @@ SMIVView::SMIVView ( QWidget *parent )
 SMIVView::~SMIVView ()
 {
 }
-
-#include "SMIVView.moc"

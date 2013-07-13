@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file implements the QImageLoader class.
 
@@ -60,5 +60,3 @@ namespace ThreadWeaver {
     }
 
 }
-
-#include "QImageLoaderJob.moc"
