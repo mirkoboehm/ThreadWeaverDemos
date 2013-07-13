@@ -30,12 +30,14 @@ class ComputeThumbNailJob : public Job
     Q_OBJECT
 public:
     explicit ComputeThumbNailJob(QImageLoaderJob *imageLoader, QObject *parent = 0);
-    /** Returns the "ready made" thumbnail. */
+    /** Returns the rendered thumbnail. */
     QImage thumb();
 
     int priority() const Q_DECL_OVERRIDE;
 protected:
-    void run();
+    void run() Q_DECL_OVERRIDE;
+
+private:
     QImage m_thumb;
     const QImageLoaderJob *m_image;
 };

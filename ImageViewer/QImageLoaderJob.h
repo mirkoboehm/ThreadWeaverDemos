@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file declares the QImageLoaderJob class. It loads the content of the
    raw data into a QImage.

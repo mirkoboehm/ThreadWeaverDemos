@@ -20,19 +20,15 @@
 
 #include "SMIVItemDelegate.h"
 
-#define NO_QIMAGE_SCALED 0
-
-ComputeThumbNailJob::ComputeThumbNailJob ( QImageLoaderJob *imageLoader,
-                                           QObject *parent)
-    : Job (parent),
-      m_image (imageLoader)
+ComputeThumbNailJob::ComputeThumbNailJob(QImageLoaderJob *imageLoader, QObject *parent)
+    : Job(parent)
+    , m_image(imageLoader)
 {
-    // addDependency ( imageLoader );
 }
 
 QImage ComputeThumbNailJob::thumb()
 {
-    P_ASSERT ( isFinished() &&  ! m_thumb.isNull() );
+    P_ASSERT(isFinished() &&  !m_thumb.isNull());
     return m_thumb;
 }
 
@@ -43,32 +39,13 @@ int ComputeThumbNailJob::priority() const
 
 void ComputeThumbNailJob::run()
 {
-    P_ASSERT ( m_image->isFinished() );
+    P_ASSERT(m_image->isFinished());
 
-#if ! NO_QIMAGE_SCALED
     QImage im = m_image->image();
-    if ( !im.isNull() )
-    {
-        m_thumb = im.scaled ( SMIVItemDelegate::ThumbWidth,
-                              SMIVItemDelegate::ThumbHeight,
-                              Qt::KeepAspectRatio,
-                              Qt::SmoothTransformation );
+    if (!im.isNull()) {
+        m_thumb = im.scaled(SMIVItemDelegate::ThumbWidth, SMIVItemDelegate::ThumbHeight,
+                            Qt::KeepAspectRatio, Qt::SmoothTransformation );
     } else {
-        debug ( 0, "ComputeThumbNailJob::run: m_image returns a nil image.\n" );
+        debug(0, "ComputeThumbNailJob::run: m_image returns a nil image.\n");
     }
-#else
-    // dummy code to disable QImage::scaled (..):
-    static QImage *im;
-    if ( im == 0 )
-    {
-        GlobalMutex.lock();
-        if ( im == 0 )
-        {
-            im = new QImage();
-            im->load ( "thumbnail.jpg" );
-        }
-        GlobalMutex.unlock();
-    }
-    m_thumb = *im;
-#endif
 }

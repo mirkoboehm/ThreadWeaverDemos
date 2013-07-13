@@ -35,7 +35,7 @@ class SMIV : public QWidget
     Q_OBJECT
 public:
     SMIV(Weaver* weaver);
-    ~SMIV();
+
 private:
     SMIVModel model;
     SMIVItemDelegate del;
@@ -49,10 +49,10 @@ private Q_SLOTS:
     void on_pbCancel_clicked();
     void on_pbSuspend_clicked();
     void on_pbQuit_clicked();
-    void slotJobDone ( ThreadWeaver::JobPointer);
-    void slotJobsDone ();
-    void weaverSuspended ();
-    void slotThumbReady (SMIVItem*);
+    void slotJobDone(ThreadWeaver::JobPointer);
+    void slotJobsDone();
+    void weaverSuspended();
+    void slotThumbReady(SMIVItem*);
 };
 
 #endif // SMIV_H

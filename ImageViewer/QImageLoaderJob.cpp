@@ -20,43 +20,41 @@
 
 namespace ThreadWeaver {
 
-    QImageLoaderJob::QImageLoaderJob (FileLoaderJob* file, QObject* parent)
-        : Job (parent),
-          m_file (file)
-    {
-        // addDependency ( file );
-    }
+QImageLoaderJob::QImageLoaderJob (FileLoaderJob* file, QObject* parent)
+    : Job (parent)
+    , m_file (file)
+{
+}
 
-    QImageLoaderJob::~QImageLoaderJob()
-    {
-    }
+QImageLoaderJob::~QImageLoaderJob()
+{
+}
 
-    QImage QImageLoaderJob::image() const
-    {
-        P_ASSERT ( isFinished() );
-        return m_image;
-    }
+QImage QImageLoaderJob::image() const
+{
+    P_ASSERT(isFinished());
+    return m_image;
+}
 
-  int QImageLoaderJob::priority() const
-  {
+int QImageLoaderJob::priority() const
+{
     return 1;
-  }
+}
 
-    void QImageLoaderJob::run()
-    {
-        P_ASSERT( m_file->isFinished() );
+void QImageLoaderJob::run()
+{
+    P_ASSERT( m_file->isFinished() );
 
-        if (m_file->data() == 0)
-	{
-	    debug (0, "QImageLoaderJob::run: data array is empty.\n" );
-	} else {
-	    m_image.loadFromData ( (const uchar*) m_file->data(), m_file->size() );
-	}
+    if (m_file->data() == 0) {
+        debug (0, "QImageLoaderJob::run: data array is empty.\n" );
+    } else {
+        m_image.loadFromData ( (const uchar*) m_file->data(), m_file->size() );
     }
+}
 
-    void QImageLoaderJob::resetImageData()
-    {
-        m_image = QImage();
-    }
+void QImageLoaderJob::resetImageData()
+{
+    m_image = QImage();
+}
 
 }

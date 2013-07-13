@@ -40,13 +40,13 @@ class FileLoaderJob : public Job
     Q_OBJECT
 public:
     explicit FileLoaderJob (const QString &filename, QObject* parent=0);
-    ~FileLoaderJob ();
+    ~FileLoaderJob();
     /** Return true if the operation succeeded. */
-    bool success () const;
+    bool success() const Q_DECL_OVERRIDE;
     /** Return the raw data of the file.
         Unless the whole file is read or if an error happened,
         this returns zero. */
-    const char* data () const;
+    const char* data() const;
     /** If an error occurred, return the error number.
         Otherwise, return zero. */
     int error() const;
@@ -55,11 +55,12 @@ public:
     /** Free the memory that holds the files content. */
     void freeMemory();
     /** Returns the file size in bytes. */
-    int size () const;
+    int size() const;
 
 protected:
-    void run();
+    void run() Q_DECL_OVERRIDE;
 
+private:
     /** Filename. */
     const QString m_filename;
     /** Pointer to memory buffer. */

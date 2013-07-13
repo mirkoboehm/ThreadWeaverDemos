@@ -41,33 +41,24 @@ SMIV::SMIV(Weaver* w)
     ui.listView->setItemDelegate(&del);
 }
 
-SMIV::~SMIV ()
-{
-}
-
 void SMIV::on_pbSelectFiles_clicked()
 {
     ui.pbSelectFiles->setEnabled(false);
     // listWidget->clear();
 
-    QStringList files = QFileDialog::getOpenFileNames
-                        ( this, "Select Images to display",
-                          QDir::homePath(),
-                          "Images (*.png *.xpm *.jpg)");
+    QStringList files = QFileDialog::getOpenFileNames(this, "Select Images to display", QDir::homePath(),
+                                                      "Images (*.png *.xpm *.jpg)");
 
-    if ( ! files.isEmpty() )
-    {
+    if (!files.isEmpty()) {
         m_noOfJobs = 3 * files.size(); // for progress display
         ui.progressBar->setEnabled (true);
         ui.progressBar->setRange (1, m_noOfJobs);
         ui.progressBar->reset();
 
         m_weaver->suspend();
-        for (int index = 0; index < files.size(); ++index)
-        {
-            SMIVItem *item = new SMIVItem ( m_weaver, files.at(index ), this );
-            connect ( item,  SIGNAL(thumbReady(SMIVItem*)),
-                      SLOT (slotThumbReady(SMIVItem*)) );
+        for (int index = 0; index < files.size(); ++index) {
+            SMIVItem *item = new SMIVItem(m_weaver, files.at(index ), this);
+            connect(item,  SIGNAL(thumbReady(SMIVItem*)), SLOT (slotThumbReady(SMIVItem*)));
         }
         m_startTime.start();
         m_weaver->resume();
@@ -75,7 +66,7 @@ void SMIV::on_pbSelectFiles_clicked()
         ui.pbSelectFiles->setEnabled(false);
         ui.pbCancel->setEnabled(true);
         ui.pbSuspend->setEnabled(true);
-        ui.pbSuspend->setText ( "Suspend" );
+        ui.pbSuspend->setText("Suspend");
     } else {
         QApplication::beep();
         on_pbCancel_clicked();
@@ -91,30 +82,25 @@ void SMIV::on_pbCancel_clicked()
     ui.pbSuspend->setEnabled(false);
 
     ui.progressBar->reset();
-    ui.progressBar->setEnabled (false);
+    ui.progressBar->setEnabled(false);
 }
 
 void SMIV::on_pbSuspend_clicked()
 {
-    if ( m_weaver->state()->stateId() == Suspended )
-    {
-        ui.pbSuspend->setText ( "Suspend" );
+    if (m_weaver->state()->stateId() == Suspended) {
+        ui.pbSuspend->setText("Suspend");
         m_weaver->resume();
     } else {
         m_weaver->suspend();
-        ui.pbSuspend->setEnabled ( false );
+        ui.pbSuspend->setEnabled(false);
     }
 }
 
 void SMIV::on_pbQuit_clicked()
 {
     // @TODO: suspend weaver and remove remaining jobs
-    ui.pbSelectFiles->setEnabled(false);
-    ui.pbCancel->setEnabled(false);
-    ui.pbSuspend->setEnabled(false);
-    ui.pbQuit->setEnabled(false);
-    if ( m_weaver->isIdle() || m_weaver->state()->stateId() == Suspended )
-    {
+    setEnabled(false);
+    if ( m_weaver->isIdle() || m_weaver->state()->stateId() == Suspended ) {
         QApplication::instance()->quit();
     } else {
         m_quit = true;
@@ -125,18 +111,16 @@ void SMIV::on_pbQuit_clicked()
 
 void SMIV::slotJobDone (JobPointer )
 {
-    ui.progressBar->setValue ( ui.progressBar->value() + 1 );
+    ui.progressBar->setValue(ui.progressBar->value() + 1);
 }
 
 void SMIV::slotJobsDone ()
 {
-    if ( ! m_startTime.isNull() )
-    {
+    if (!m_startTime.isNull() ) {
         qDebug() << "SMIV::slotJobsDone: elapsed time: " << m_startTime.elapsed() << " msecs";
     }
 
-    if ( m_quit )
-    {
+    if (m_quit) {
         QApplication::instance()->quit();
     } else {
         ui.pbSelectFiles->setEnabled(true);
@@ -144,30 +128,29 @@ void SMIV::slotJobsDone ()
         ui.pbSuspend->setEnabled(false);
 
         ui.progressBar->reset();
-        ui.progressBar->setEnabled (false);
+        ui.progressBar->setEnabled(false);
     }
 }
 
 void SMIV::weaverSuspended()
 {
-    ui.pbSuspend->setText ( "Resume" );
-    ui.pbSuspend->setEnabled ( true );
+    ui.pbSuspend->setText("Resume");
+    ui.pbSuspend->setEnabled(true);
 }
 
 
-void SMIV::slotThumbReady ( SMIVItem *item )
+void SMIV::slotThumbReady(SMIVItem *item)
 {
-    model.insert ( item );
-    ui.listView->scrollTo ( model.index( model.rowCount()-1,  0 ),
-                            QAbstractItemView::PositionAtBottom );
+    model.insert(item);
+    ui.listView->scrollTo(model.index(model.rowCount()-1,  0), QAbstractItemView::PositionAtBottom);
 }
 
-int main ( int argc,  char** argv )
+int main(int argc, char** argv)
 {
-    QApplication app ( argc,  argv );
-    ThreadWeaver::setDebugLevel ( true, 1 );
+    QApplication app(argc, argv);
+    ThreadWeaver::setDebugLevel(true, 1);
     ThreadWeaver::Weaver weaver;
-    weaver.setMaximumNumberOfThreads (8);
+    weaver.setMaximumNumberOfThreads(8);
     SMIV smiv ( & weaver );
     smiv.show();
     return app.exec();

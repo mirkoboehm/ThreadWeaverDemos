@@ -48,9 +48,9 @@ const char* FileLoaderJob::data () const
     // loaded, this way we do not need to mutex it:
     if ( isFinished() )
     {
-	return m_data;
+        return m_data;
     } else {
-	return 0;
+        return 0;
     }
 }
 
