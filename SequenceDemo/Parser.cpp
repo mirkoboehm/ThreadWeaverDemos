@@ -1,5 +1,4 @@
-﻿#include <QtDebug>
-#include <QDomDocument>
+﻿#include <QDomDocument>
 #include "Parser.h"
 
 Parser::Parser(QObject *parent) :
@@ -22,20 +21,17 @@ void Parser::run()
         return;
     }
 
-    QDomNodeList tumblrs = doc.elementsByTagName("tumblelog");
-    if (!tumblrs.isEmpty()) {
-        QString titleText = tumblrs.at(0).toElement().text();
-        emit title(titleText);
-    }
+    auto textOfFirst = [&doc](const char* name) {
+        auto elements = doc.elementsByTagName(name);
+        if (elements.isEmpty()) return QString();
+        return elements.at(0).toElement().text();
+    };
 
-    QDomNodeList captions = doc.elementsByTagName("photo-caption");
-    if (!captions.isEmpty()) {
-        QString captionText = captions.at(0).toElement().text();
-        emit caption(captionText);
-    }
+    emit title(textOfFirst("tumblelog"));
+    emit caption(textOfFirst("photo-caption"));
 }
 
-bool Parser::success()
+bool Parser::success() const
 {
     return !m_data.isEmpty();
 }

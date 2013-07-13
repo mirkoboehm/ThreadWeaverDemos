@@ -17,14 +17,11 @@ void LatestUpdateRetriever::run()
     QNetworkAccessManager manager;
     QEventLoop loop;
     connect(&manager, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()));
-    // http://fickedinger.tumblr.com/api/read?start=0&num=1
-    // http://api.tumblr.com/v2/blog/fickedinger.tumblr.com/avatar
-    QNetworkReply* reply = manager.get(QNetworkRequest(QUrl("http://fickedinger.tumblr.com/api/read?start=0&num=1")));
+    auto reply = manager.get(QNetworkRequest(QUrl("http://fickedinger.tumblr.com/api/read?start=0&num=1")));
     loop.exec();
     if (reply->error() == QNetworkReply::NoError) {
         m_success = true;
-        QByteArray data = reply->readAll();
-        emit dataRetrieved(data);
+        emit dataRetrieved(reply->readAll());
     } else {
         m_success = false;
     }

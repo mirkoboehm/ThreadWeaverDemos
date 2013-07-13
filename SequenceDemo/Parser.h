@@ -20,7 +20,7 @@ Q_SIGNALS:
 
 protected:
     void run() Q_DECL_OVERRIDE;
-    bool success() Q_DECL_OVERRIDE;
+    bool success() const Q_DECL_OVERRIDE;
 
 private:
     QByteArray m_data;

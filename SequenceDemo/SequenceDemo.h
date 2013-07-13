@@ -5,9 +5,7 @@
 #include <LatestUpdateRetriever.h>
 #include <Parser.h>
 
-namespace Ui {
-class SequenceDemo;
-}
+#include "ui_SequenceDemo.h"
 
 class SequenceDemo : public QDialog
 {
@@ -15,10 +13,9 @@ class SequenceDemo : public QDialog
     
 public:
     explicit SequenceDemo(QWidget *parent = 0);
-    ~SequenceDemo();
     
 private:
-    Ui::SequenceDemo *ui;
+    QScopedPointer<Ui::SequenceDemo> ui;
     LatestUpdateRetriever m_retriever;
     Parser m_parser;
 };
