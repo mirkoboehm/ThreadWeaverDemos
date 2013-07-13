@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file declares the SMIVModel class. 
 
@@ -26,19 +26,17 @@ class SMIVModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    SMIVModel( QObject* parent = 0 );
+    SMIVModel(QObject* parent = 0);
     ~SMIVModel();
 
-    void insert ( const SMIVItem *item);
+    void insert(const SMIVItem *item);
 
-    QVariant headerData ( int section, Qt::Orientation orientation,
-                          int role = Qt::DisplayRole ) const ;
-
-    int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex & parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
     const SMIVItem* data ( int index ) const;
 
-    QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
+    QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const Q_DECL_OVERRIDE;
 
 private:
     QList<const SMIVItem*> m_data;

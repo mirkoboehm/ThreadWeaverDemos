@@ -30,43 +30,38 @@
 
 static QueuePolicy* resourceRestriction()
 {
-    static ResourceRestrictionPolicy policy( 4 );
+    static ResourceRestrictionPolicy policy(4);
     return &policy;
 }
 
 
-SMIVItem::SMIVItem ( Weaver *weaver,
-                     const QString& path,  QObject *parent )
-    : QObject ( parent )
-    , m_path ( path )
-    , m_weaver ( weaver )
+SMIVItem::SMIVItem(Weaver *weaver, const QString& path,  QObject *parent)
+    : QObject(parent)
+    , m_path(path)
+    , m_weaver(weaver)
 {
-    QFileInfo fi ( path );
-    if ( fi.isFile() && fi.isReadable() )
-    {
+    QFileInfo fi(path);
+    if (fi.isFile() && fi.isReadable()) {
         m_sequence = new JobSequence ( this );
 
         m_name = fi.baseName();
         m_desc2 = fi.absoluteFilePath();
-        m_fileloader = new FileLoaderJob ( fi.absoluteFilePath(),  this );
-        m_fileloader->setObjectName ( tr ( "load file: " ) + fi.baseName() );
-        connect ( m_fileloader,  SIGNAL (done(ThreadWeaver::JobPointer)),
-                  SLOT (fileLoaderReady(ThreadWeaver::JobPointer)) );
-        m_fileloader->assignQueuePolicy( resourceRestriction() );
-        m_imageloader = new QImageLoaderJob ( m_fileloader,  this );
-        connect ( m_imageloader,  SIGNAL (done(ThreadWeaver::JobPointer)),
-                  SLOT (imageLoaderReady(ThreadWeaver::JobPointer)) );
-        m_imageloader->setObjectName( tr( "load image: " ) + fi.baseName() );
-        m_thumb = new ComputeThumbNailJob ( m_imageloader,  this );
-        connect ( m_thumb,  SIGNAL (done(ThreadWeaver::JobPointer)),
-                  SLOT (computeThumbReady(ThreadWeaver::JobPointer)) );
-        m_thumb->setObjectName ( tr( "scale image: " ) + fi.baseName() );
-        m_sequence->addRawJob( m_fileloader );
-        m_sequence->addRawJob( m_imageloader );
-        m_sequence->addRawJob( m_thumb );
-        weaver->enqueueRaw( m_sequence );
+        m_fileloader = new FileLoaderJob(fi.absoluteFilePath(), this);
+        m_fileloader->setObjectName(tr("load file: ") + fi.baseName());
+        connect(m_fileloader, SIGNAL (done(ThreadWeaver::JobPointer)), SLOT (fileLoaderReady(ThreadWeaver::JobPointer)));
+        m_fileloader->assignQueuePolicy(resourceRestriction());
+        m_imageloader = new QImageLoaderJob(m_fileloader, this);
+        connect(m_imageloader,  SIGNAL (done(ThreadWeaver::JobPointer)), SLOT (imageLoaderReady(ThreadWeaver::JobPointer)));
+        m_imageloader->setObjectName(tr("load image: ") + fi.baseName());
+        m_thumb = new ComputeThumbNailJob(m_imageloader,  this);
+        connect(m_thumb,  SIGNAL (done(ThreadWeaver::JobPointer)), SLOT (computeThumbReady(ThreadWeaver::JobPointer)));
+        m_thumb->setObjectName(tr("scale image: ") + fi.baseName());
+        m_sequence->addRawJob(m_fileloader);
+        m_sequence->addRawJob(m_imageloader);
+        m_sequence->addRawJob(m_thumb);
+        weaver->enqueueRaw(m_sequence);
     } else {
-        // in this wee little program, we just ignore that we cannot access the file
+        // in this wee little program, we just ignore if we cannot access the file
     }
 }
 
@@ -87,35 +82,29 @@ QString SMIVItem::desc2() const
 
 void SMIVItem::fileLoaderReady( ThreadWeaver::JobPointer )
 {
-    debug ( 3, "SMIVItem::fileLoaderReady: %s loaded.\n",
-            qPrintable ( m_name ) );
+    debug(3, "SMIVItem::fileLoaderReady: %s loaded.\n", qPrintable(m_name));
 }
 
 void SMIVItem::imageLoaderReady(JobPointer )
 {
-    debug ( 3, "SMIVItem::imageLoaderReady: %s processed.\n",
-            qPrintable ( m_name ) );
+    debug(3, "SMIVItem::imageLoaderReady: %s processed.\n", qPrintable(m_name));
     // freem the memory held by the file loader, it is now redundant:
     m_fileloader->freeMemory();
     // this event has to be receive *before* computeThumbReady:
-    P_ASSERT ( m_imageloader != 0 );
+    P_ASSERT(m_imageloader != 0);
     QSize size = m_imageloader->image().size();
-    m_desc1 = QString("%1x%2 Pixels")
-              .arg( size.width() )
-              .arg( size.height() );
+    m_desc1 = QString("%1x%2 Pixels").arg( size.width()).arg( size.height());
 }
 
 void SMIVItem::computeThumbReady(JobPointer )
 {
-    debug ( 3, "SMIVItem::computeThumbReady: %s scaled.\n",
-            qPrintable ( m_name ) );
-    //   delete m_imageloader; m_imageloader = 0;
+    debug(3, "SMIVItem::computeThumbReady: %s scaled.\n", qPrintable(m_name));
     m_imageloader->resetImageData();
-    emit ( thumbReady ( this ) );
+    emit thumbReady(this);
 }
 
 QImage SMIVItem::thumb() const
 {
-    P_ASSERT ( m_thumb->isFinished() );
+    P_ASSERT(m_thumb->isFinished());
     return m_thumb->thumb();
 }

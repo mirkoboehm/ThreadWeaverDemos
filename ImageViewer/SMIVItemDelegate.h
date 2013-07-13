@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+﻿/* -*- C++ -*-
 
    This file declares the SMIVItemDelegate class.
 
@@ -24,16 +24,15 @@ class SMIVItemDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
-    SMIVItemDelegate( QObject* parent = 0);
+    SMIVItemDelegate(QObject* parent = 0);
     static const int FrameWidth;
     static const int ThumbHeight;
     static const int ThumbWidth;
     static const int TextMargin;
     static const int Margin;
 private:
-    QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    void paint ( QPainter * painter, const QStyleOptionViewItem & option,
-                 const QModelIndex & index ) const;
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex& index) const;
+    void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
 #endif // SMIVITEMDELEGATE

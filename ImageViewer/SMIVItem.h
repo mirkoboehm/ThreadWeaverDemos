@@ -34,18 +34,19 @@ class SMIVItem : public QObject
 {
     Q_OBJECT
 public:
-    explicit SMIVItem( Weaver *weaver = 0,
-              const QString& path  = QString(), QObject *parent = 0 );
+    explicit SMIVItem(Weaver *weaver = 0, const QString& path  = QString(), QObject *parent = 0);
     QString name() const;
     QString desc1() const;
     QString desc2() const;
     QImage thumb() const;
+
 Q_SIGNALS:
-    void thumbReady( SMIVItem* );
+    void thumbReady(SMIVItem*);
+
 private Q_SLOTS:
-    void fileLoaderReady ( ThreadWeaver::JobPointer );
-    void imageLoaderReady ( ThreadWeaver::JobPointer );
-    void computeThumbReady ( ThreadWeaver::JobPointer );
+    void fileLoaderReady(ThreadWeaver::JobPointer);
+    void imageLoaderReady(ThreadWeaver::JobPointer);
+    void computeThumbReady(ThreadWeaver::JobPointer);
 protected:
     QString m_path;
     QString m_name;
