@@ -28,7 +28,7 @@ ComputeThumbNailJob::ComputeThumbNailJob(QImageLoaderJob *imageLoader, QObject *
 
 QImage ComputeThumbNailJob::thumb()
 {
-    P_ASSERT(isFinished() &&  !m_thumb.isNull());
+//    P_ASSERT(/*isFinished() &&*/  !m_thumb.isNull());
     return m_thumb;
 }
 
@@ -39,7 +39,7 @@ int ComputeThumbNailJob::priority() const
 
 void ComputeThumbNailJob::run()
 {
-    P_ASSERT(m_image->isFinished());
+    //P_ASSERT(m_image->isFinished());
 
     QImage im = m_image->image();
     if (!im.isNull()) {

@@ -69,11 +69,11 @@ void FileLoaderJob::run()
 
         if( m_file.read( m_data, size + 1) ) {
             m_error = 0;
-            qDebug() << "FileLoaderJob::run: loaded.";
         } else {
             m_error = 1;
             qDebug() << "FileLoaderJob::run: failure loading.";
         }
+        m_file.close();
     } else {
         m_error = 2;
         qDebug() << "FileLoaderJob::run: file does not exist or is not readable.";

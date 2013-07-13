@@ -30,7 +30,7 @@
 
 static QueuePolicy* resourceRestriction()
 {
-    static ResourceRestrictionPolicy policy(4);
+    static ResourceRestrictionPolicy policy(16);
     return &policy;
 }
 
@@ -105,6 +105,6 @@ void SMIVItem::computeThumbReady(JobPointer )
 
 QImage SMIVItem::thumb() const
 {
-    P_ASSERT(m_thumb->isFinished());
+    //P_ASSERT(m_thumb->isFinished());
     return m_thumb->thumb();
 }

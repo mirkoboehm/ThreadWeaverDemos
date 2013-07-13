@@ -32,7 +32,7 @@ QImageLoaderJob::~QImageLoaderJob()
 
 QImage QImageLoaderJob::image() const
 {
-    P_ASSERT(isFinished());
+    //P_ASSERT(isFinished());
     return m_image;
 }
 
@@ -43,7 +43,7 @@ int QImageLoaderJob::priority() const
 
 void QImageLoaderJob::run()
 {
-    P_ASSERT( m_file->isFinished() );
+    //P_ASSERT(m_file->isFinished());
 
     if (m_file->data() == 0) {
         debug (0, "QImageLoaderJob::run: data array is empty.\n" );
