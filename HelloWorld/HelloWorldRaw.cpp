@@ -13,4 +13,3 @@ int main(int argc, char** argv)
     Weaver::instance()->enqueueRaw(&l);
     Weaver::instance()->finish();
 }
-
