@@ -13,10 +13,9 @@ using namespace ThreadWeaver;
 SequenceDemo::SequenceDemo(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::SequenceDemo)
+    , m_parser(&m_retriever)
 {
     ui->setupUi(this);
-    //communicate between jobs:
-    connect(&m_retriever, SIGNAL(dataRetrieved(QByteArray)), &m_parser, SLOT(setData(QByteArray)));
     //communicate results:
     connect(&m_parser, SIGNAL(title(QString)), ui->title, SLOT(setText(QString)));
     connect(&m_parser, SIGNAL(caption(QString)), ui->caption, SLOT(setText(QString)));

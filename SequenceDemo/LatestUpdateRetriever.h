@@ -11,14 +11,14 @@ class LatestUpdateRetriever : public ThreadWeaver::Job
 public:
     explicit LatestUpdateRetriever(QObject *parent = 0);
     
+    const QByteArray& data() const;
+
 protected:
     void run() Q_DECL_OVERRIDE;
     bool success() const Q_DECL_OVERRIDE;
 
-Q_SIGNALS:
-    void dataRetrieved(QByteArray);
-
 private:
+    QByteArray m_data;
     bool m_success;
 };
 

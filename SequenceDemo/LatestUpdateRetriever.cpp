@@ -12,6 +12,11 @@ LatestUpdateRetriever::LatestUpdateRetriever(QObject *parent)
 {
 }
 
+const QByteArray& LatestUpdateRetriever::data() const
+{
+    return m_data;
+}
+
 void LatestUpdateRetriever::run()
 {
     QNetworkAccessManager manager;
@@ -21,7 +26,7 @@ void LatestUpdateRetriever::run()
     loop.exec();
     if (reply->error() == QNetworkReply::NoError) {
         m_success = true;
-        emit dataRetrieved(reply->readAll());
+        m_data = reply->readAll();
     } else {
         m_success = false;
     }

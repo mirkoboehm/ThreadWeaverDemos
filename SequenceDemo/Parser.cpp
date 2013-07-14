@@ -1,23 +1,18 @@
 ﻿#include <QDomDocument>
 #include "Parser.h"
 
-Parser::Parser(QObject *parent) :
-    Job(parent)
+Parser::Parser(LatestUpdateRetriever *retriever, QObject *parent)
+    : Job(parent)
+    , m_retriever(retriever)
 {
-}
-
-void Parser::setData(QByteArray data)
-{
-    m_data = data;
 }
 
 void Parser::run()
 {
-    if (m_data.isEmpty()) return;
+    if (m_retriever->data().isEmpty()) return;
 
     QDomDocument doc;
-    if (!doc.setContent(m_data)) {
-        m_data.clear(); //error condition
+    if (!doc.setContent(m_retriever->data())) {
         return;
     }
 
@@ -29,9 +24,4 @@ void Parser::run()
 
     emit title(textOfFirst("tumblelog"));
     emit caption(textOfFirst("photo-caption"));
-}
-
-bool Parser::success() const
-{
-    return !m_data.isEmpty();
 }
