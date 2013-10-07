@@ -37,9 +37,8 @@ namespace ThreadWeaver {
 */
 class FileLoaderJob : public Job
 {
-    Q_OBJECT
 public:
-    explicit FileLoaderJob (const QString &filename, QObject* parent=0);
+    explicit FileLoaderJob (const QString &filename);
     ~FileLoaderJob();
     /** Return true if the operation succeeded. */
     bool success() const Q_DECL_OVERRIDE;
@@ -58,7 +57,7 @@ public:
     int size() const;
 
 protected:
-    void run() Q_DECL_OVERRIDE;
+    void run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*) Q_DECL_OVERRIDE;
 
 private:
     /** Filename. */

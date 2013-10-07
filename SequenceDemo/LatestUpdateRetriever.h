@@ -1,20 +1,20 @@
 ﻿#ifndef LATESTUPDATERETRIEVER_H
 #define LATESTUPDATERETRIEVER_H
 
+#include <QObject>
 #include <QByteArray>
 
 #include <threadweaver/Job.h>
 
 class LatestUpdateRetriever : public ThreadWeaver::Job
 {
-    Q_OBJECT
 public:
-    explicit LatestUpdateRetriever(QObject *parent = 0);
+    explicit LatestUpdateRetriever();
     
     const QByteArray& data() const;
 
 protected:
-    void run() Q_DECL_OVERRIDE;
+    void run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*) Q_DECL_OVERRIDE;
     bool success() const Q_DECL_OVERRIDE;
 
 private:

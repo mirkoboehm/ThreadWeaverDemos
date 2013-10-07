@@ -23,6 +23,7 @@
 
 #include <ThreadWeaver.h>
 #include <JobSequence.h>
+#include <QObjectDecorator.h>
 #include <FileLoaderJob.h>
 
 #include "QImageLoaderJob.h"
@@ -44,9 +45,9 @@ Q_SIGNALS:
     void thumbReady(SMIVItem*);
 
 private Q_SLOTS:
-    void fileLoaderReady(ThreadWeaver::JobPointer);
     void imageLoaderReady(ThreadWeaver::JobPointer);
-    void computeThumbReady(ThreadWeaver::JobPointer);
+    void computeThumbReady();
+
 protected:
     QString m_path;
     QString m_name;
@@ -54,9 +55,9 @@ protected:
     QString m_desc2;
     Weaver *m_weaver;
     JobSequence *m_sequence;
-    FileLoaderJob *m_fileloader;
-    QImageLoaderJob *m_imageloader;
-    ComputeThumbNailJob *m_thumb;
+    ThreadWeaver::QJobPointer m_fileloader;
+    QImageLoaderJob* m_imageloader;
+    ComputeThumbnailJob* m_thumb;
 };
 
 #endif // SMIVItem_H

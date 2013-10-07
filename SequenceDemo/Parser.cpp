@@ -2,12 +2,12 @@
 #include "Parser.h"
 
 Parser::Parser(LatestUpdateRetriever *retriever, QObject *parent)
-    : Job(parent)
+    : QObject(parent)
     , m_retriever(retriever)
 {
 }
 
-void Parser::run()
+void Parser::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
     if (m_retriever->data().isEmpty()) return;
 

@@ -6,7 +6,7 @@
 #include <threadweaver/Job.h>
 #include <LatestUpdateRetriever.h>
 
-class Parser : public ThreadWeaver::Job
+class Parser : public QObject, public ThreadWeaver::Job
 {
     Q_OBJECT
 public:
@@ -17,7 +17,7 @@ Q_SIGNALS:
     void caption(QString);
 
 protected:
-    void run() Q_DECL_OVERRIDE;
+    void run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*) Q_DECL_OVERRIDE;
 
 private:
     QByteArray m_data;

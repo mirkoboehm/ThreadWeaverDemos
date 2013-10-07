@@ -21,7 +21,7 @@ SequenceDemo::SequenceDemo(QWidget *parent)
     connect(&m_parser, SIGNAL(caption(QString)), ui->caption, SLOT(setText(QString)));
     //set up sequence, add a little delay at the beginning:
     QSharedPointer<JobSequence> sequence(new JobSequence());
-    sequence->addJob(JobPointer(new Lambda( []() { QThread::sleep(1); } )));
+    sequence->addJob(JobPointer(new Lambda<void(*)()>( []() { QThread::sleep(1); } )));
     sequence->addRawJob(&m_retriever);
     sequence->addRawJob(&m_parser);
     //go:

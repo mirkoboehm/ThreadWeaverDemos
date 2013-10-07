@@ -23,23 +23,28 @@
 
 #include "QImageLoaderJob.h"
 
-using namespace ThreadWeaver;
+namespace ThreadWeaver {
 
-class ComputeThumbNailJob : public Job
+class ComputeThumbnailJob : public QObject, public Job
 {
     Q_OBJECT
 public:
-    explicit ComputeThumbNailJob(QImageLoaderJob *imageLoader, QObject *parent = 0);
+    explicit ComputeThumbnailJob(QImageLoaderJob *imageLoader, QObject* parent = 0);
     /** Returns the rendered thumbnail. */
     QImage thumb();
 
     int priority() const Q_DECL_OVERRIDE;
 protected:
-    void run() Q_DECL_OVERRIDE;
+    void run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*) Q_DECL_OVERRIDE;
+
+Q_SIGNALS:
+    void thumbnailComplete();
 
 private:
     QImage m_thumb;
-    const QImageLoaderJob *m_image;
+    QImageLoaderJob *m_image;
 };
+
+}
 
 #endif // COMPUTETHUMBNAILJOB_H

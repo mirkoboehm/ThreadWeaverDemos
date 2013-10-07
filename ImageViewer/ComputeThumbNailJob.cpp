@@ -20,32 +20,38 @@
 
 #include "SMIVItemDelegate.h"
 
-ComputeThumbNailJob::ComputeThumbNailJob(QImageLoaderJob *imageLoader, QObject *parent)
-    : Job(parent)
+namespace ThreadWeaver {
+
+ComputeThumbnailJob::ComputeThumbnailJob(QImageLoaderJob *imageLoader, QObject* parent)
+    : QObject(parent)
     , m_image(imageLoader)
 {
 }
 
-QImage ComputeThumbNailJob::thumb()
+QImage ComputeThumbnailJob::thumb()
 {
 //    P_ASSERT(/*isFinished() &&*/  !m_thumb.isNull());
     return m_thumb;
 }
 
-int ComputeThumbNailJob::priority() const
+int ComputeThumbnailJob::priority() const
 {
   return 1;
 }
 
-void ComputeThumbNailJob::run()
+void ComputeThumbnailJob::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
     //P_ASSERT(m_image->isFinished());
 
-    QImage im = m_image->image();
+    QImage im = m_image->job()->image();
     if (!im.isNull()) {
         m_thumb = im.scaled(SMIVItemDelegate::ThumbWidth, SMIVItemDelegate::ThumbHeight,
                             Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        m_image->job()->resetImageData();
     } else {
         debug(0, "ComputeThumbNailJob::run: m_image returns a nil image.\n");
     }
+    emit thumbnailComplete();
+}
+
 }

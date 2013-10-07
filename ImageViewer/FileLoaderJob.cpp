@@ -20,9 +20,8 @@
 
 namespace ThreadWeaver {
 
-FileLoaderJob::FileLoaderJob (const QString &filename, QObject* parent)
-    : Job (parent)
-    , m_filename (filename)
+FileLoaderJob::FileLoaderJob (const QString &filename)
+    : m_filename (filename)
     , m_data (0)
     , m_error (0)
 {
@@ -54,7 +53,7 @@ const char* FileLoaderJob::data () const
     }
 }
 
-void FileLoaderJob::run()
+void FileLoaderJob::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
     if( m_filename.isEmpty() ) {
         qDebug() << "FileLoaderJob::run: empty filename.";

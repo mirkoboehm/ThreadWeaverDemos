@@ -16,11 +16,14 @@
 
 #include "SMIVItem.h"
 
+#include <QtDebug>
 #include <QtCore/QStringList>
 #include <QImage>
 #include <QtCore/QTimer>
 #include <QtCore/QFileInfo>
 
+#include <threadweaver/JobPointer.h>
+#include <threadweaver/QObjectDecorator.h>
 #include <DebuggingAids.h>
 #include <ResourceRestrictionPolicy.h>
 
@@ -34,30 +37,37 @@ static QueuePolicy* resourceRestriction()
     return &policy;
 }
 
-
 SMIVItem::SMIVItem(Weaver *weaver, const QString& path,  QObject *parent)
     : QObject(parent)
     , m_path(path)
     , m_weaver(weaver)
 {
+    using namespace ThreadWeaver;
+
     QFileInfo fi(path);
     if (fi.isFile() && fi.isReadable()) {
-        m_sequence = new JobSequence ( this );
+        m_sequence = new JobSequence();
 
         m_name = fi.baseName();
         m_desc2 = fi.absoluteFilePath();
-        m_fileloader = new FileLoaderJob(fi.absoluteFilePath(), this);
+
+        auto fileloader = new FileLoaderJob(fi.absoluteFilePath());
+        m_fileloader = QJobPointer(new QObjectDecorator(fileloader));
         m_fileloader->setObjectName(tr("load file: ") + fi.baseName());
-        connect(m_fileloader, SIGNAL (done(ThreadWeaver::JobPointer)), SLOT (fileLoaderReady(ThreadWeaver::JobPointer)));
         m_fileloader->assignQueuePolicy(resourceRestriction());
-        m_imageloader = new QImageLoaderJob(m_fileloader, this);
-        connect(m_imageloader,  SIGNAL (done(ThreadWeaver::JobPointer)), SLOT (imageLoaderReady(ThreadWeaver::JobPointer)));
+        m_sequence->addJob(m_fileloader);
+
+
+        m_imageloader = new QImageLoaderJob(fileloader, this);
+        connect(m_imageloader, SIGNAL (done(ThreadWeaver::JobPointer)),
+                SLOT (imageLoaderReady(ThreadWeaver::JobPointer)));
         m_imageloader->setObjectName(tr("load image: ") + fi.baseName());
-        m_thumb = new ComputeThumbNailJob(m_imageloader,  this);
-        connect(m_thumb,  SIGNAL (done(ThreadWeaver::JobPointer)), SLOT (computeThumbReady(ThreadWeaver::JobPointer)));
-        m_thumb->setObjectName(tr("scale image: ") + fi.baseName());
-        m_sequence->addRawJob(m_fileloader);
         m_sequence->addRawJob(m_imageloader);
+
+
+        m_thumb = new ComputeThumbnailJob(m_imageloader);
+        connect(m_thumb, SIGNAL(thumbnailComplete()), SLOT(computeThumbReady()));
+        m_thumb->setObjectName(tr("scale image: ") + fi.baseName());
         m_sequence->addRawJob(m_thumb);
         weaver->enqueueRaw(m_sequence);
     } else {
@@ -80,31 +90,19 @@ QString SMIVItem::desc2() const
     return m_desc2;
 }
 
-void SMIVItem::fileLoaderReady( ThreadWeaver::JobPointer )
-{
-    debug(3, "SMIVItem::fileLoaderReady: %s loaded.\n", qPrintable(m_name));
-}
-
-void SMIVItem::imageLoaderReady(JobPointer )
+void SMIVItem::imageLoaderReady(JobPointer)
 {
     debug(3, "SMIVItem::imageLoaderReady: %s processed.\n", qPrintable(m_name));
-    // freem the memory held by the file loader, it is now redundant:
-    m_fileloader->freeMemory();
-    // this event has to be receive *before* computeThumbReady:
-    P_ASSERT(m_imageloader != 0);
-    QSize size = m_imageloader->image().size();
-    m_desc1 = QString("%1x%2 Pixels").arg( size.width()).arg( size.height());
+    m_desc1 = m_imageloader->job()->description();
 }
 
-void SMIVItem::computeThumbReady(JobPointer )
+void SMIVItem::computeThumbReady()
 {
     debug(3, "SMIVItem::computeThumbReady: %s scaled.\n", qPrintable(m_name));
-    m_imageloader->resetImageData();
     emit thumbReady(this);
 }
 
 QImage SMIVItem::thumb() const
 {
-    //P_ASSERT(m_thumb->isFinished());
     return m_thumb->thumb();
 }
