@@ -2,13 +2,11 @@
 #include <QThread>
 
 #include <threadweaver/ThreadWeaver.h>
-#include <threadweaver/JobSequence.h>
-#include <threadweaver/Lambda.h>
-#include <JobPointer.h>
 
 #include "SequenceDemo.h"
 
 using namespace ThreadWeaver;
+using namespace ThreadWeaver::Queueing;
 
 SequenceDemo::SequenceDemo(QWidget *parent)
     : QDialog(parent)
@@ -19,11 +17,11 @@ SequenceDemo::SequenceDemo(QWidget *parent)
     //communicate results:
     connect(&m_parser, SIGNAL(title(QString)), ui->title, SLOT(setText(QString)));
     connect(&m_parser, SIGNAL(caption(QString)), ui->caption, SLOT(setText(QString)));
+
     //set up sequence, add a little delay at the beginning:
-    QSharedPointer<JobSequence> sequence(new JobSequence());
-    sequence->addJob(JobPointer(new Lambda<void(*)()>( []() { QThread::sleep(1); } )));
-    sequence->addRawJob(&m_retriever);
-    sequence->addRawJob(&m_parser);
-    //go:
-    Weaver::instance()->enqueue(sequence);
+    auto sequence(new JobSequence());
+    *sequence << make_job( []() { QThread::sleep(1); } )
+              << make_job_raw(&m_retriever)
+              << make_job_raw(&m_parser);
+    enqueue(sequence);
 }

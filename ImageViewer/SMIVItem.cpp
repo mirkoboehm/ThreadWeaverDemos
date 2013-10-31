@@ -33,7 +33,7 @@
 
 static QueuePolicy* resourceRestriction()
 {
-    static ResourceRestrictionPolicy policy(16);
+    static ResourceRestrictionPolicy policy(4);
     return &policy;
 }
 
@@ -69,7 +69,7 @@ SMIVItem::SMIVItem(Weaver *weaver, const QString& path,  QObject *parent)
         connect(m_thumb, SIGNAL(thumbnailComplete()), SLOT(computeThumbReady()));
         m_thumb->setObjectName(tr("scale image: ") + fi.baseName());
         m_sequence->addRawJob(m_thumb);
-        weaver->enqueueRaw(m_sequence);
+        ThreadWeaver::Queueing::enqueue_raw(weaver, m_sequence);
     } else {
         // in this wee little program, we just ignore if we cannot access the file
     }
