@@ -3,8 +3,9 @@
 
 #include <QByteArray>
 
-#include <threadweaver/Job.h>
-#include <LatestUpdateRetriever.h>
+#include <threadweaver/Job>
+
+#include "LatestUpdateRetriever.h"
 
 class Parser : public QObject, public ThreadWeaver::Job
 {

@@ -12,5 +12,5 @@ int main(int argc, char *argv[])
     SequenceDemo w;
     w.show();
     a.exec();
-    ThreadWeaver::Weaver::instance()->finish();
+    ThreadWeaver::Queue::instance()->finish();
 }

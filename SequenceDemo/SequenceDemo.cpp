@@ -6,7 +6,6 @@
 #include "SequenceDemo.h"
 
 using namespace ThreadWeaver;
-using namespace ThreadWeaver::Queueing;
 
 SequenceDemo::SequenceDemo(QWidget *parent)
     : QDialog(parent)
@@ -19,7 +18,7 @@ SequenceDemo::SequenceDemo(QWidget *parent)
     connect(&m_parser, SIGNAL(caption(QString)), ui->caption, SLOT(setText(QString)));
 
     //set up sequence, add a little delay at the beginning:
-    auto sequence(new JobSequence());
+    auto sequence(new Sequence());
     *sequence << make_job( []() { QThread::sleep(1); } )
               << make_job_raw(&m_retriever)
               << make_job_raw(&m_parser);

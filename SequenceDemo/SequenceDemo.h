@@ -2,8 +2,8 @@
 #define SEQUENCEDEMO_H
 
 #include <QDialog>
-#include <LatestUpdateRetriever.h>
-#include <Parser.h>
+#include "LatestUpdateRetriever.h"
+#include "Parser.h"
 
 #include "ui_SequenceDemo.h"
 

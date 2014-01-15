@@ -12,3 +12,4 @@ find_package(KF5ThreadWeaver ${KF5_VERSION} REQUIRED)
 
 add_subdirectory(HelloWorld)
 add_subdirectory(HelloWorldRaw)
+add_subdirectory(SequenceDemo)
