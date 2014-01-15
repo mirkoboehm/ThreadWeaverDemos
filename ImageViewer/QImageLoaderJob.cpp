@@ -16,7 +16,7 @@
 
 #include "QImageLoaderJob.h"
 
-#include <DebuggingAids.h>
+#include <threadweaver/DebuggingAids>
 
 namespace ThreadWeaver {
 

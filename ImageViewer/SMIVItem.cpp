@@ -24,8 +24,9 @@
 
 #include <threadweaver/JobPointer.h>
 #include <threadweaver/QObjectDecorator.h>
-#include <DebuggingAids.h>
-#include <ResourceRestrictionPolicy.h>
+#include <threadweaver/DebuggingAids>
+#include <threadweaver/QueueStream>
+#include <threadweaver/ResourceRestrictionPolicy>
 
 #include "SMIVItemDelegate.h"
 #include "FileLoaderJob.h"
@@ -37,16 +38,16 @@ static QueuePolicy* resourceRestriction()
     return &policy;
 }
 
-SMIVItem::SMIVItem(Weaver *weaver, const QString& path,  QObject *parent)
+SMIVItem::SMIVItem(Queue *queue, const QString& path,  QObject *parent)
     : QObject(parent)
     , m_path(path)
-    , m_weaver(weaver)
+    , m_queue(queue)
 {
     using namespace ThreadWeaver;
 
     QFileInfo fi(path);
     if (fi.isFile() && fi.isReadable()) {
-        m_sequence = new JobSequence();
+        m_sequence = new Sequence();
 
         m_name = fi.baseName();
         m_desc2 = fi.absoluteFilePath();
@@ -55,21 +56,19 @@ SMIVItem::SMIVItem(Weaver *weaver, const QString& path,  QObject *parent)
         m_fileloader = QJobPointer(new QObjectDecorator(fileloader));
         m_fileloader->setObjectName(tr("load file: ") + fi.baseName());
         m_fileloader->assignQueuePolicy(resourceRestriction());
-        m_sequence->addJob(m_fileloader);
-
 
         m_imageloader = new QImageLoaderJob(fileloader, this);
         connect(m_imageloader, SIGNAL (done(ThreadWeaver::JobPointer)),
                 SLOT (imageLoaderReady(ThreadWeaver::JobPointer)));
         m_imageloader->setObjectName(tr("load image: ") + fi.baseName());
-        m_sequence->addRawJob(m_imageloader);
 
 
         m_thumb = new ComputeThumbnailJob(m_imageloader);
         connect(m_thumb, SIGNAL(thumbnailComplete()), SLOT(computeThumbReady()));
         m_thumb->setObjectName(tr("scale image: ") + fi.baseName());
-        m_sequence->addRawJob(m_thumb);
-        ThreadWeaver::Queueing::enqueue_raw(weaver, m_sequence);
+
+        *m_sequence << m_fileloader << m_imageloader << m_thumb;
+        queue->stream() << m_sequence;
     } else {
         // in this wee little program, we just ignore if we cannot access the file
     }

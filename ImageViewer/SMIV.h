@@ -21,7 +21,7 @@
 #include <QList>
 #include <QWidget>
 
-#include <ThreadWeaver.h>
+#include <threadweaver/ThreadWeaver>
 
 #include "ui_SMIVBase.h"
 #include "SMIVModel.h"
@@ -34,13 +34,13 @@ class SMIV : public QWidget
 {
     Q_OBJECT
 public:
-    SMIV(Weaver* weaver);
+    SMIV(Queue* queue);
 
 private:
     SMIVModel model;
     SMIVItemDelegate del;
     Ui::SMIVBase ui;
-    Weaver* m_weaver;
+    Queue* m_queue;
     int m_noOfJobs;
     bool m_quit;
     QTime m_startTime;

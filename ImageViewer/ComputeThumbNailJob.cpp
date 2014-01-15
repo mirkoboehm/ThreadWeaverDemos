@@ -16,7 +16,7 @@
 
 #include "ComputeThumbNailJob.h"
 
-#include <DebuggingAids.h>
+#include <threadweaver/DebuggingAids>
 
 #include "SMIVItemDelegate.h"
 

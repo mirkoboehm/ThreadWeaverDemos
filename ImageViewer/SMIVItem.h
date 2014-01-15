@@ -21,11 +21,11 @@
 
 #include <QImage>
 
-#include <ThreadWeaver.h>
-#include <JobSequence.h>
-#include <QObjectDecorator.h>
-#include <FileLoaderJob.h>
+#include <threadweaver/ThreadWeaver>
+#include <threadweaver/Sequence>
+#include <threadweaver/QObjectDecorator>
 
+#include "FileLoaderJob.h"
 #include "QImageLoaderJob.h"
 #include "ComputeThumbNailJob.h"
 
@@ -35,7 +35,7 @@ class SMIVItem : public QObject
 {
     Q_OBJECT
 public:
-    explicit SMIVItem(Weaver *weaver = 0, const QString& path  = QString(), QObject *parent = 0);
+    explicit SMIVItem(Queue *weaver = 0, const QString& path  = QString(), QObject *parent = 0);
     QString name() const;
     QString desc1() const;
     QString desc2() const;
@@ -53,9 +53,9 @@ protected:
     QString m_name;
     QString m_desc1;
     QString m_desc2;
-    Weaver *m_weaver;
-    JobSequence *m_sequence;
-    ThreadWeaver::QJobPointer m_fileloader;
+    Queue *m_queue;
+    Sequence *m_sequence;
+    QJobPointer m_fileloader;
     QImageLoaderJob* m_imageloader;
     ComputeThumbnailJob* m_thumb;
 };

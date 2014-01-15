@@ -21,22 +21,22 @@
 #include <QFileDialog>
 #include <QApplication>
 
-#include <State.h>
+//#include <threadweaver/State>
 #include <ThreadWeaver.h>
-#include <DebuggingAids.h>
+#include <threadweaver/DebuggingAids>
 
 using namespace ThreadWeaver;
 
-SMIV::SMIV(Weaver* w)
+SMIV::SMIV(Queue* q)
     : QWidget()
-    , m_weaver(w)
+    , m_queue(q)
     , m_noOfJobs(0)
     , m_quit(false)
 {
     ui.setupUi(this);
-    connect(m_weaver, SIGNAL (finished()), SLOT(slotJobsDone()));
-    connect(m_weaver, SIGNAL (jobDone(ThreadWeaver::JobPointer)), SLOT(slotJobDone(ThreadWeaver::JobPointer)));
-    connect(m_weaver, SIGNAL (suspended()), SLOT(weaverSuspended()));
+    connect(m_queue, SIGNAL (finished()), SLOT(slotJobsDone()));
+    connect(m_queue, SIGNAL (jobDone(ThreadWeaver::JobPointer)), SLOT(slotJobDone(ThreadWeaver::JobPointer)));
+    connect(m_queue, SIGNAL (suspended()), SLOT(weaverSuspended()));
     ui.listView->setModel(&model);
     ui.listView->setItemDelegate(&del);
 }
@@ -55,13 +55,13 @@ void SMIV::on_pbSelectFiles_clicked()
         ui.progressBar->setRange (1, m_noOfJobs);
         ui.progressBar->reset();
 
-        m_weaver->suspend();
+        m_queue->suspend();
         for (int index = 0; index < files.size(); ++index) {
-            SMIVItem *item = new SMIVItem(m_weaver, files.at(index ), this);
+            SMIVItem *item = new SMIVItem(m_queue, files.at(index ), this);
             connect(item,  SIGNAL(thumbReady(SMIVItem*)), SLOT (slotThumbReady(SMIVItem*)));
         }
         m_startTime.start();
-        m_weaver->resume();
+        m_queue->resume();
 
         ui.pbSelectFiles->setEnabled(false);
         ui.pbCancel->setEnabled(true);
@@ -75,8 +75,8 @@ void SMIV::on_pbSelectFiles_clicked()
 
 void SMIV::on_pbCancel_clicked()
 {
-    m_weaver->dequeue();
-    m_weaver->requestAbort();
+    m_queue->dequeue();
+    m_queue->requestAbort();
     ui.pbSelectFiles->setEnabled(true);
     ui.pbCancel->setEnabled(false);
     ui.pbSuspend->setEnabled(false);
@@ -87,11 +87,11 @@ void SMIV::on_pbCancel_clicked()
 
 void SMIV::on_pbSuspend_clicked()
 {
-    if (m_weaver->state()->stateId() == Suspended) {
+    if (m_queue->state()->stateId() == Suspended) {
         ui.pbSuspend->setText("Suspend");
-        m_weaver->resume();
+        m_queue->resume();
     } else {
-        m_weaver->suspend();
+        m_queue->suspend();
         ui.pbSuspend->setEnabled(false);
     }
 }
@@ -100,12 +100,12 @@ void SMIV::on_pbQuit_clicked()
 {
     // @TODO: suspend weaver and remove remaining jobs
     setEnabled(false);
-    if ( m_weaver->isIdle() || m_weaver->state()->stateId() == Suspended ) {
+    if ( m_queue->isIdle() || m_queue->state()->stateId() == Suspended ) {
         QApplication::instance()->quit();
     } else {
         m_quit = true;
-        m_weaver->dequeue(); // on Weaver::finished() we exit
-        m_weaver->resume();
+        m_queue->dequeue(); // on Weaver::finished() we exit
+        m_queue->resume();
     }
 }
 
@@ -149,9 +149,9 @@ int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
     ThreadWeaver::setDebugLevel(true, 1);
-    ThreadWeaver::Weaver weaver;
-    weaver.setMaximumNumberOfThreads(4);
-    SMIV smiv ( & weaver );
+    ThreadWeaver::Queue queue;
+    queue.setMaximumNumberOfThreads(4);
+    SMIV smiv(&queue);
     smiv.show();
     return app.exec();
 }
