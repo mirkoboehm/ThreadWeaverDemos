@@ -2,8 +2,6 @@
 ﻿#include <QtCore>
 #include <ThreadWeaver/ThreadWeaver>
 
-using namespace ThreadWeaver;
-
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
