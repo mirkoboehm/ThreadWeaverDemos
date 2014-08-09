@@ -1,5 +1,8 @@
+﻿﻿//@@snippet(sample-helloworld)
 ﻿#include <QtCore>
 #include <ThreadWeaver/ThreadWeaver>
+
+using namespace ThreadWeaver;
 
 int main(int argc, char** argv)
 {
@@ -8,3 +11,4 @@ int main(int argc, char** argv)
     using namespace ThreadWeaver;
     stream() << make_job( []() { qDebug() << "Hello World!"; } );
 }
+//@@end(sample-helloworld)
