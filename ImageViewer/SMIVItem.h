@@ -21,9 +21,9 @@
 
 #include <QImage>
 
-#include <threadweaver/ThreadWeaver>
-#include <threadweaver/Sequence>
-#include <threadweaver/QObjectDecorator>
+#include <ThreadWeaver/ThreadWeaver>
+#include <ThreadWeaver/Sequence>
+#include <ThreadWeaver/QObjectDecorator>
 
 #include "FileLoaderJob.h"
 #include "QImageLoaderJob.h"

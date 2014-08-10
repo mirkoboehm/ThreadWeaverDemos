@@ -20,7 +20,7 @@
 
 #include <QtCore/QFile>
 
-#include <threadweaver/Job>
+#include <ThreadWeaver/Job>
 
 namespace ThreadWeaver {
 

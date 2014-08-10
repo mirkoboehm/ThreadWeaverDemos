@@ -21,9 +21,9 @@
 #include <QFileDialog>
 #include <QApplication>
 
-//#include <threadweaver/State>
-#include <ThreadWeaver.h>
-#include <threadweaver/DebuggingAids>
+#include <ThreadWeaver/State>
+#include <ThreadWeaver/ThreadWeaver>
+#include <ThreadWeaver/DebuggingAids>
 
 using namespace ThreadWeaver;
 

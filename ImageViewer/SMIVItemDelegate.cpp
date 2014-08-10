@@ -21,7 +21,7 @@
 #include <QtCore/QModelIndex>
 #include <QPainter>
 
-#include <DebuggingAids.h>
+#include <ThreadWeaver/DebuggingAids>
 
 const int SMIVItemDelegate::FrameWidth = 2;
 const int SMIVItemDelegate::ThumbHeight = 60;

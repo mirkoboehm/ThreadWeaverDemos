@@ -19,7 +19,7 @@
 
 #include <QtCore/QStringList>
 
-#include <threadweaver/DebuggingAids>
+#include <ThreadWeaver/DebuggingAids>
 
 
 SMIVModel::SMIVModel( QObject* parent )

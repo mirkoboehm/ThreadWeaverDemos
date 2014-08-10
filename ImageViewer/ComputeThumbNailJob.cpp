@@ -16,7 +16,7 @@
 
 #include "ComputeThumbNailJob.h"
 
-#include <threadweaver/DebuggingAids>
+#include <ThreadWeaver/DebuggingAids>
 
 #include "SMIVItemDelegate.h"
 
@@ -49,7 +49,7 @@ void ComputeThumbnailJob::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
                             Qt::KeepAspectRatio, Qt::SmoothTransformation );
         m_image->job()->resetImageData();
     } else {
-        debug(0, "ComputeThumbNailJob::run: m_image returns a nil image.\n");
+        TWDEBUG(0, "ComputeThumbNailJob::run: m_image returns a nil image.\n");
     }
     emit thumbnailComplete();
 }

@@ -16,7 +16,7 @@
 
 #include "QImageLoaderJob.h"
 
-#include <threadweaver/DebuggingAids>
+#include <ThreadWeaver/DebuggingAids>
 
 namespace ThreadWeaver {
 
@@ -50,7 +50,7 @@ void QImageLoader::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread *)
     //P_ASSERT(m_file->isFinished());
 
     if (m_file->data() == 0) {
-        debug (0, "QImageLoader::run: data array is empty.\n" );
+        TWDEBUG (0, "QImageLoader::run: data array is empty.\n" );
     } else {
         if (m_image.loadFromData ( (const uchar*) m_file->data(), m_file->size())) {
             m_description = QObject::tr("%1x%2 Pixels").arg(m_image.size().width()).arg(m_image.size().height());

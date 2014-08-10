@@ -21,7 +21,7 @@
 #include <QList>
 #include <QWidget>
 
-#include <threadweaver/ThreadWeaver>
+#include <ThreadWeaver/ThreadWeaver>
 
 #include "ui_SMIVBase.h"
 #include "SMIVModel.h"

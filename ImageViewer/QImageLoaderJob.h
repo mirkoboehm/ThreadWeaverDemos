@@ -20,8 +20,8 @@
 
 #include <QImage>
 
-#include <threadweaver/Job>
-#include <threadweaver/QObjectDecorator>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/QObjectDecorator>
 
 #include "FileLoaderJob.h"
 

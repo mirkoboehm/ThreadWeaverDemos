@@ -22,11 +22,11 @@
 #include <QtCore/QTimer>
 #include <QtCore/QFileInfo>
 
-#include <threadweaver/JobPointer.h>
-#include <threadweaver/QObjectDecorator.h>
-#include <threadweaver/DebuggingAids>
-#include <threadweaver/QueueStream>
-#include <threadweaver/ResourceRestrictionPolicy>
+#include <ThreadWeaver/JobPointer>
+#include <ThreadWeaver/QObjectDecorator>
+#include <ThreadWeaver/DebuggingAids>
+#include <ThreadWeaver/QueueStream>
+#include <ThreadWeaver/ResourceRestrictionPolicy>
 
 #include "SMIVItemDelegate.h"
 #include "FileLoaderJob.h"
@@ -91,13 +91,13 @@ QString SMIVItem::desc2() const
 
 void SMIVItem::imageLoaderReady(JobPointer)
 {
-    debug(3, "SMIVItem::imageLoaderReady: %s processed.\n", qPrintable(m_name));
+    TWDEBUG(3, "SMIVItem::imageLoaderReady: %s processed.\n", qPrintable(m_name));
     m_desc1 = m_imageloader->job()->description();
 }
 
 void SMIVItem::computeThumbReady()
 {
-    debug(3, "SMIVItem::computeThumbReady: %s scaled.\n", qPrintable(m_name));
+    TWDEBUG(3, "SMIVItem::computeThumbReady: %s scaled.\n", qPrintable(m_name));
     emit thumbReady(this);
 }
 

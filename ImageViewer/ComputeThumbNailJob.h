@@ -19,7 +19,7 @@
 
 #include <QImage>
 
-#include <threadweaver/Job>
+#include <ThreadWeaver/Job>
 
 #include "QImageLoaderJob.h"
 
