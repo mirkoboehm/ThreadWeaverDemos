@@ -1,5 +1,5 @@
 ﻿#include <QtCore>
-#include <threadweaver/ThreadWeaver>
+#include <ThreadWeaver/ThreadWeaver>
 
 int main(int argc, char** argv)
 {

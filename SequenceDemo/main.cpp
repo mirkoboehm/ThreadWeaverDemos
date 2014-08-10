@@ -1,6 +1,6 @@
 ﻿#include <QApplication>
 
-#include <threadweaver/ThreadWeaver.h>
+#include <ThreadWeaver/ThreadWeaver>
 //#include <threadweaver/DebuggingAids.h>
 
 #include "SequenceDemo.h"

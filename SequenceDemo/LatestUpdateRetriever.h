@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QByteArray>
 
-#include <threadweaver/Job.h>
+#include <ThreadWeaver/Job>
 
 class LatestUpdateRetriever : public ThreadWeaver::Job
 {

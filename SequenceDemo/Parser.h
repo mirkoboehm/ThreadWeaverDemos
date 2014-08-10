@@ -3,7 +3,7 @@
 
 #include <QByteArray>
 
-#include <threadweaver/Job>
+#include <ThreadWeaver/Job>
 
 #include "LatestUpdateRetriever.h"
 

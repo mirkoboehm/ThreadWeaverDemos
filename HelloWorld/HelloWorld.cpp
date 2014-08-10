@@ -1,5 +1,5 @@
-﻿﻿//@@snippet(sample-helloworld)
-﻿#include <QtCore>
+﻿//@@snippet(sample-helloworld)
+#include <QtCore>
 #include <ThreadWeaver/ThreadWeaver>
 
 int main(int argc, char** argv)

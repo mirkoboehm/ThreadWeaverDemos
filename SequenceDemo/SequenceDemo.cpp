@@ -1,7 +1,7 @@
 ﻿#include <QSharedPointer>
 #include <QThread>
 
-#include <threadweaver/ThreadWeaver.h>
+#include <ThreadWeaver/ThreadWeaver>
 
 #include "SequenceDemo.h"
 
