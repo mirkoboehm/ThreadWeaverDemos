@@ -55,9 +55,12 @@ SMIVItem::SMIVItem(Queue *queue, const QString& path,  QObject *parent)
         auto fileloader = new FileLoaderJob(fi.absoluteFilePath());
         m_fileloader = QJobPointer(new QObjectDecorator(fileloader));
         m_fileloader->setObjectName(tr("load file: ") + fi.baseName());
-        m_fileloader->assignQueuePolicy(resourceRestriction());
+        {
+            QMutexLocker l(m_fileloader->mutex());
+            m_fileloader->assignQueuePolicy(resourceRestriction());
+        }
 
-        m_imageloader = new QImageLoaderJob(fileloader, this);
+        m_imageloader = new QImageLoaderJob(fileloader);
         connect(m_imageloader, SIGNAL (done(ThreadWeaver::JobPointer)),
                 SLOT (imageLoaderReady(ThreadWeaver::JobPointer)));
         m_imageloader->setObjectName(tr("load image: ") + fi.baseName());
