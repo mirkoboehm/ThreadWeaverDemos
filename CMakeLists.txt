@@ -10,6 +10,5 @@ set(CMAKE_CXX_FLAGS "-Wall -std=c++11")
 # Find and link the ThreadWeaver framework:
 find_package(KF5ThreadWeaver ${KF5_VERSION} REQUIRED)
 
-add_subdirectory(HelloWorldRaw)
 add_subdirectory(SequenceDemo)
 add_subdirectory(ImageViewer)
